@@ -1,1 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Year 8 Tutor Web</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    h1, h2 { text-align: center; color: #1a3c6e; }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      background-color: #1a3c6e;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background-color: #14406a; }
+    #lesson, #quiz { margin-top: 20px; padding: 15px; background-color: #e0f0ff; border-radius: 10px; }
+    .quiz-option { display: block; margin: 5px 0; }
+  </style>
+</head>
+<body>
+
+<h1>🧠 Year 8 Tutor Web</h1>
+
+<h2>Select Subject:</h2>
+<div id="subjects">
+  <button onclick="startLesson('science')">Science</button>
+  <button onclick="startLesson('maths')">Maths</button>
+  <button onclick="startLesson('english')">English</button>
+</div>
+
+<div id="lesson" style="display:none;"></div>
+<div id="quiz" style="display:none;"></div>
+
+<script>
+const lessons = {
+  science: [
+    {topic: "Forces", content: "A force is a push or pull acting on an object."},
+    {topic: "Cells", content: "All living things are made of cells."}
+  ],
+  maths: [
+    {topic: "Fractions", content: "A fraction represents a part of a whole."},
+    {topic: "Algebra", content: "Algebra uses letters to represent numbers."}
+  ],
+  english: [
+    {topic: "Similes", content: "A simile compares two things using 'like' or 'as'."},
+    {topic: "Paragraph Structure", content: "A paragraph has a topic sentence and supporting details."}
+  ]
+};
+
+const quizzes = {
+  science: [
+    {q:"Which is a force?", options:["Push","Apple","Chair"], answer:"Push"},
+    {q:"What are all living things made of?", options:["Cells","Rocks","Air"], answer:"Cells"}
+  ],
+  maths: [
+    {q:"What is 1/2 + 1/2?", options:["1","2","1/4"], answer:"1"},
+    {q:"What does algebra use?", options:["Letters","Numbers only","Colors"], answer:"Letters"}
+  ],
+  english: [
+    {q:"A simile uses?", options:["Like/As","And/Or","If/Then"], answer:"Like/As"},
+    {q:"Paragraphs have?", options:["Topic sentence","Random words","Numbers"], answer:"Topic sentence"}
+  ]
+};
+
+function speak(text) {
+  const msg = new SpeechSynthesisUtterance(text);
+  window.speechSynthesis.speak(msg);
+}
+
+function startLesson(subject) {
+  const lesson = lessons[subject][Math.floor(Math.random()*lessons[subject].length)];
+  document.getElementById("lesson").style.display = "block";
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("lesson").innerHTML = `<h2>${lesson.topic}</h2><p>${lesson.content}</p><button onclick="startQuiz('${subject}')">Take Quiz</button>`;
+  speak(`${lesson.topic}. ${lesson.content}`);
+}
+
+function startQuiz(subject) {
+  const quiz = quizzes[subject][Math.floor(Math.random()*quizzes[subject].length)];
+  document.getElementById("quiz").style.display = "block";
+  let optionsHtml = "";
+  quiz.options.forEach(opt => {
+    optionsHtml += `<button class="quiz-option" onclick="checkAnswer('${opt}','${quiz.answer}')">${opt}</button>`;
+  });
+  document.getElementById("quiz").innerHTML = `<h2>Quiz</h2><p>${quiz.q}</p>${optionsHtml}`;
+  speak(quiz.q);
+}
+
+function checkAnswer(selected, correct) {
+  if(selected === correct){
+    alert("✅ Correct!");
+    speak("Correct!");
+  } else {
+    alert(`❌ Wrong! The correct answer is ${correct}`);
+    speak(`Wrong! The correct answer is ${correct}`);
+  }
+}
+</script>
+
+</body>
+</html>
 
